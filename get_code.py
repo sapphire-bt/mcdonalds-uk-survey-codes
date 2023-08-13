@@ -79,7 +79,6 @@ def generate_code(store_id, order_id, purchased, visit_type=3):
 		code[8:12],
 	)
 
-
 def main(argc, argv):
 	if argc < 4:
 		print("Usage:")
