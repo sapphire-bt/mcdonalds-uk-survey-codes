@@ -1,6 +1,6 @@
 const CHAR_MAP = "CM7WD6N4RHF9ZL3XKQGVPBTJY";
 const BASE = CHAR_MAP.length;
-const EPOCH = new Date("2016-02-01");
+const EPOCH = new Date("2024-01-01");
 
 function encode(num) {
 	let encoded = "";
