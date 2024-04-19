@@ -68,4 +68,4 @@ function generateCode(storeId, orderId, purchased) {
 	code += encode(getCheckDigit(code));
 
 	return code.match(/.{4}/g).join("-");
-}
+}get_code.py
