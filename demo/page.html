@@ -1,0 +1,90 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+        <link rel="stylesheet" href="styles.css" />
+        <title>McDonald's UK Survey Code Generator</title>
+    </head>
+    <body>
+        <main>
+            <section class="inputs">
+                <div class="row">
+                    <label class="df aic">
+                        <span>Store:</span>
+                        <select id="store-id" autocomplete="on">
+                            <option></option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="row">
+                    <label class="df aic">
+                        <span>Order ID:</span>
+                        <input id="order-id" type="number" pattern="[0-9]*" min="0" autocomplete="off" />
+                    </label>
+                </div>
+
+                <div class="row">
+                    <label class="df aic">
+                        <span>Purchased:</span>
+                        <input id="purchased" type="datetime-local" min="2016-02-01T00:00" autocomplete="off" />
+                    </label>
+                </div>
+            </section>
+
+            <hr />
+
+            <section class="code">
+                <p>Entry code:</p>
+                <code id="code">-</code>
+            </section>
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="../get_code.js"></script>
+        <script>
+            $(async () => {
+                const stores = await getStores();
+                const storeSelect = $("#store-id");
+
+                for (const row of stores) {
+                    const [id, name] = row;
+                    const option = $(`<option value="${id}">${name} (${id})</option>`);
+                    storeSelect.append(option);
+                }
+
+                const select2Instance = storeSelect.select2({
+                    placeholder: "Select a store",
+                });
+
+                $("#store-id, #order-id, #purchased").on("input change", getCode);
+
+                function getCode() {
+                    const storeId = parseInt($("#store-id").val(), 10);
+                    const orderId = parseInt($("#order-id").val(), 10);
+                    const purchased = $("#purchased").val();
+                    let val = "-";
+
+                    if (!isNaN(storeId) && !isNaN(orderId) && storeId >= 0 && orderId >= 0 && purchased) {
+                        val = generateCode(storeId, orderId, purchased);
+                    }
+
+                    $("#code").text(val);
+                }
+
+                async function getStores() {
+                    return new Promise(resolve => {
+                        fetch("../stores.tsv")
+                            .then(response => response.text())
+                            .then(data => {
+                                resolve(data.split("\n").map(row => row.split("\t")));
+                            })
+                            .catch(console.log);
+                    });
+                }
+            })
+        </script>
+    </body>
+</html>

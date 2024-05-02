@@ -1,0 +1,59 @@
+body {
+    background-color: #333;
+    color: bisque;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    margin: 0;
+    padding: 16px;
+}
+main {
+    max-width: 768px;
+}
+hr {
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+label {
+    cursor: pointer;
+}
+input[type="datetime-local"],
+input[type="number"],
+select {
+    font-family: inherit;
+    font-size: inherit;
+}
+input[type="datetime-local"],
+input[type="number"] {
+    min-width: 64px;
+}
+section:not(:last-child) {
+    margin-bottom: 24px;
+}
+.df {
+    display: flex;
+}
+.fdc {
+    flex-direction: column;
+}
+.aic {
+    align-items: center;
+}
+.jcc {
+    justify-content: center;
+}
+.inputs > .row:not(:last-child) {
+    margin-bottom: 24px;
+}
+.inputs > .row label > span:first-child {
+    margin-right: 12px;
+    min-width: 85px;
+    text-align: right;
+}
+#code {
+    background-color: #222;
+    display: inline-block;
+    font-size: 32px;
+    padding: 16px;
+}
+.select2-container li {
+    color: black;
+}
