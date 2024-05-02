@@ -10,7 +10,7 @@
             if ($num < $this->base) {
                 return $this->chars[$num];
             } else {
-                return self::encode((int) (floor($num / $this->base))) . $this->chars[$num % $this->base];
+                return $this->encode((int) (floor($num / $this->base))) . $this->chars[$num % $this->base];
             }
         }
 
@@ -18,7 +18,7 @@
             $decoded = strpos($this->chars, substr($code, -1)) * $multiplier;
 
             if (strlen($code) > 1) {
-                return self::decode(substr($code, 0, -1), $multiplier * $this->base) + $decoded;
+                return $this->decode(substr($code, 0, -1), $multiplier * $this->base) + $decoded;
             } else {
                 return $decoded;
             }
