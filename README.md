@@ -97,4 +97,4 @@ Further discussion on Reverse Engineering Stack Exchange where this was original
 
 ## Confused?
 
-If the above made no sense to you and/or you just want to generate a code, download this repository using the green "<> Code" button at the top of the page, open demo/page.html in a web browser, then fill out the parameters as required.
+If the above made no sense to you and/or you just want to generate a code, download this repository using the green "<> Code" button at the top of the page, open demo/page.html in a web browser on your computer/laptop, then fill out the parameters as required.
