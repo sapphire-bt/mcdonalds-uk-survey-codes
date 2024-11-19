@@ -1,5 +1,5 @@
-import sys
-from datetime import datetime
+import random
+from datetime import datetime, timedelta
 
 CHARS = "CM7WD6N4RHF9ZL3XKQGVPBTJY"
 BASE = len(CHARS)
@@ -20,25 +20,14 @@ def decode(encoded):
 		num += (BASE**exp) * CHARS.find(c)
 	return num
 
-def get_order_flags(order_id, visit_type):
-	# Not actually sure if these are "flags", and there doesn't appear to be any
-	# validation when submitting survey codes with different flags.
-	flags = 0
-
-	unknown_flag_1 = decode("MC")  # 25  - only seems to apply when visit_type is 3 or 5
-	unknown_flag_2 = decode("DC")  # 100 - always seems to be added
-
-	if visit_type == 3 or visit_type == 5:
-		flags += unknown_flag_1
-
-	flags += unknown_flag_2
-
-	return flags
-
-def get_minutes_since_epoch(purchased):
-	purchased = datetime.strptime(purchased, "%Y-%m-%d %H:%M")
-	minutes_since_epoch = purchased - EPOCH_BEGIN
-	return int(minutes_since_epoch.total_seconds() / 60)
+# The date is checked to make sure it's not expired, so here we make sure it's within 2 days of current time
+def random_minutes_from_epoch():
+    EPOCH = datetime(2016, 2, 1)
+    now = datetime.now()
+    two_days_in_millis = 2 * 24 * 60 * 60 * 1000
+    random_time = now + timedelta(milliseconds=random.uniform(-two_days_in_millis, two_days_in_millis))
+    minutes_from_epoch = int((random_time - EPOCH).total_seconds() // 60)
+    return minutes_from_epoch
 
 def get_check_digit(code):
 	"""Base 25 version of the Luhn algorithm"""
@@ -63,13 +52,12 @@ def get_check_digit(code):
 
 	return check_digit
 
-def generate_code(store_id, order_id, purchased, visit_type=3):
+def generate_code(store_id, order_id, purchased):
 	enc_store_id = encode(store_id).rjust(3, encode(0))
-	enc_visit_type = encode(visit_type)
-	enc_order_id = encode((order_id % 100) + get_order_flags(order_id, visit_type))
-	enc_minutes = encode(get_minutes_since_epoch(purchased)).rjust(5, encode(0))
-
-	code = enc_store_id + enc_visit_type + enc_order_id + enc_minutes
+	enc_order_id = encode((order_id % 100) + 125)
+	enc_minutes = encode(purchased).rjust(5, encode(0))
+	print(store_id, order_id, purchased)
+	code = enc_store_id + encode(3) + enc_order_id + enc_minutes
 
 	code += encode(get_check_digit(code))
 
@@ -78,23 +66,8 @@ def generate_code(store_id, order_id, purchased, visit_type=3):
 		code[4:8],
 		code[8:12],
 	)
-
-def main(argc, argv):
-	if argc < 4:
-		print("Usage:")
-		print("    get_code.py <store ID> <order ID> <purchased>")
-		print()
-		print("Purchase date/time must be in format: YYYY-MM-DD HH:mm")
-		print()
-		return 1
-
-	store_id, order_id, purchased = argv[1:4]
-
-	code = generate_code(int(store_id), int(order_id), purchased)
-
-	print(code)
-
-	return 0
+def r(min, max):
+    return int(random.random() * (max - min) + min)
 
 if __name__ == "__main__":
-	sys.exit(main(len(sys.argv), sys.argv))
+	print(generate_code(r(1, 1000), r(10, 150), random_minutes_from_epoch()))
