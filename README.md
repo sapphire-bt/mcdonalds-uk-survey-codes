@@ -2,6 +2,8 @@
 
 Generate a code that can be entered in the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey that, upon completion, gives you another code that can be redeemed for discounted items.
 
+~~As of August 2023 you only need to enter the code to begin the survey; a price is not required.~~
+
 As of November 2024, you need to enter a code and a price to start the survey. However, the price is not verified, so it can be any random value.
 
 ## Usage
