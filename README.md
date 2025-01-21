@@ -6,10 +6,10 @@ As of August 2023 you only need to enter the code to begin the survey; a price i
 
 ## Usage
 
-Call the script with 3 arguments:
+Call the script with the following arguments:
 
 ```
-get_code.py 1553 1743 "2023-03-14 16:48"
+get_code.py --store-id 1553 --order-id 1743 --purchased "2023-03-14 16:48"
 ```
 
 The above will output `7ZWW-NGH3-ZFWJ` which matches the following receipt:
@@ -94,6 +94,8 @@ Values are encoded using the following base 25 system:
 </table>
 
 Further discussion on Reverse Engineering Stack Exchange where this was originally posted: https://reverseengineering.stackexchange.com/questions/32129/mcdonalds-receipt-codes
+
+Also included is a .csv file containing several survey codes gathered for research (discussed in issue #13).
 
 ## Confused?
 
