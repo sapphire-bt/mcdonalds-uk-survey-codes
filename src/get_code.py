@@ -23,24 +23,6 @@ def decode(encoded):
     return num
 
 
-def get_order_flags(order_id, visit_type):
-    # Not actually sure if these are "flags", and there doesn't appear to be any
-    # validation when submitting survey codes with different flags.
-    flags = 0
-
-    # These values seem to appear in most codes.
-    unknown_flag_1 = decode("DC")  # 100
-    unknown_flag_2 = decode("MC")  # 25
-
-    if visit_type > 0:
-        flags += unknown_flag_1
-
-    if visit_type == 3 or visit_type == 5:
-        flags += unknown_flag_2
-
-    return flags
-
-
 def get_minutes_since_epoch(purchased):
     purchased = datetime.strptime(purchased, "%Y-%m-%d %H:%M")
     minutes_since_epoch = purchased - EPOCH_BEGIN
@@ -71,13 +53,13 @@ def get_check_digit(code):
     return check_digit
 
 
-def generate_code(store_id, order_id, purchased, visit_type):
-    enc_store_id = encode(store_id).rjust(3, encode(0))
-    enc_visit_type = encode(visit_type)
-    enc_order_id = encode((order_id % 100) + get_order_flags(order_id, visit_type)).rjust(2, encode(0))
-    enc_minutes = encode(get_minutes_since_epoch(purchased)).rjust(5, encode(0))
+def generate_code(store_id, order_id, purchased, reg):
+    zero = encode(0)  # Used for padding
+    enc_store_id = encode(store_id).rjust(3, zero)
+    enc_order_id = encode((order_id % 100) + (reg * 100)).rjust(3, zero)
+    enc_minutes = encode(get_minutes_since_epoch(purchased)).rjust(5, zero)
 
-    code = enc_store_id + enc_visit_type + enc_order_id + enc_minutes
+    code = enc_store_id + enc_order_id + enc_minutes
 
     code += encode(get_check_digit(code))
 
@@ -98,6 +80,6 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--store-id", type=int, required=True)
     parser.add_argument("-o", "--order-id", type=int, required=True)
     parser.add_argument("-p", "--purchased", required=True)
-    parser.add_argument("-v", "--visit-type", type=int, default=3)
+    parser.add_argument("-r", "--reg", type=int, default=20)
     args = parser.parse_args()
     main(args)
