@@ -14,7 +14,7 @@ get_code.py --store-id 1553 --order-id 1743 --purchased "2023-03-14 16:48"
 
 The above will output `7ZWW-NGH3-ZFWJ` which matches the following receipt:
 
-![Receipt showing code 7ZWW-NGH3-ZFWJ](./7ZWW-NGH3-ZFWJ.jpg)
+![Receipt showing code 7ZWW-NGH3-ZFWJ](./assets/7ZWW-NGH3-ZFWJ.jpg)
 
 A non-exhaustive list of store IDs is included (stores.tsv). You can also find store IDs by inspecting the return data from the [McDonald's store locator](https://www.mcdonalds.com/gb/en-gb/restaurant-locator.html) or by simply checking receipts from stores.
 

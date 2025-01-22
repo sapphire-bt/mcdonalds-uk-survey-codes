@@ -43,7 +43,7 @@
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-        <script src="../get_code.js"></script>
+        <script src="../src/get_code.js"></script>
         <script>
             $(async () => {
                 const stores = await getStores();
@@ -76,7 +76,7 @@
 
                 async function getStores() {
                     return new Promise(resolve => {
-                        fetch("https://raw.githubusercontent.com/sapphire-bt/mcdonalds-uk-survey-codes/main/stores.tsv")
+                        fetch("https://raw.githubusercontent.com/sapphire-bt/mcdonalds-uk-survey-codes/main/assets/stores.tsv")
                             .then(response => response.text())
                             .then(data => {
                                 resolve(data.split("\n").map(row => row.split("\t")));
