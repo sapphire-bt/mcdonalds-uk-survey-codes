@@ -5,6 +5,7 @@ from datetime import datetime
 CHARS = "CM7WD6N4RHF9ZL3XKQGVPBTJY"
 BASE = len(CHARS)
 EPOCH_BEGIN = datetime(2016, 2, 1)
+REG_DELIVERY = 61
 
 
 def encode(num):
@@ -55,6 +56,10 @@ def get_check_digit(code):
 
 def generate_code(store_id, order_id, purchased, reg):
     zero = encode(0)  # Used for padding
+
+    if reg == REG_DELIVERY:
+        reg = 0
+
     enc_store_id = encode(store_id).rjust(3, zero)
     enc_order_id = encode((order_id % 100) + (reg * 100)).rjust(3, zero)
     enc_minutes = encode(get_minutes_since_epoch(purchased)).rjust(5, zero)
