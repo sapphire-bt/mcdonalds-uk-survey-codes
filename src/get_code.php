@@ -4,8 +4,9 @@
             $this->chars = 'CM7WD6N4RHF9ZL3XKQGVPBTJY';
             $this->base = strlen($this->chars);
             $this->epoch = DateTime::createFromFormat('Y-m-d H:i', '2016-02-01 00:00');
+            $this->reg_delivery = 61;
         }
-        
+
         function encode($num) {
             if ($num < $this->base) {
                 return $this->chars[$num];
@@ -24,24 +25,16 @@
             }
         }
 
-        function getOrderFlags($orderId, $visitType) {
-            $flags = 0;
+        function getMinutesSinceEpoch($purchased) {
+            $purchased = DateTime::createFromFormat('Y-m-d H:i', $purchased, new DateTimeZone('Europe/London'));
+            $isDST = (bool) $purchased->format('I');
+            $minutes = ($purchased->getTimestamp() - $this->epoch->getTimestamp()) / 60;
 
-            $unknownFlag1 = $this->decode('MC');
-            $unknownFlag2 = $this->decode('DC');
-
-            if ($visitType === 3 || $visitType === 5) {
-                $flags += $unknownFlag1;
+            if (!$isDST) {
+                $minutes -= 60;
             }
 
-            $flags += $unknownFlag2;
-
-            return $flags;
-        }
-
-        function getMinutesSinceEpoch($purchased) {
-            $purchased = DateTime::createFromFormat('Y-m-d H:i', $purchased);
-            return ($purchased->getTimestamp() - $this->epoch->getTimestamp()) / 60;
+            return $minutes;
         }
 
         function getCheckDigit($code) {
@@ -72,14 +65,17 @@
             return $checkDigit;
         }
 
-        function generateCode($storeId, $orderId, $purchased, $visitType=3) {
+        function generateCode($storeId, $orderId, $purchased, $reg=20) {
             $zero = $this->encode(0);
-            $encStoreId = str_pad($this->encode($storeId), 3, $zero, STR_PAD_LEFT);
-            $encVisitType = $this->encode($visitType);
-            $encOrderId = $this->encode(($orderId % 100) + $this->getOrderFlags($orderId, $visitType));
-            $encMinutes = str_pad($this->encode($this->getMinutesSinceEpoch($purchased)), 5, $zero, STR_PAD_LEFT);
+            $encStoreId = $this->encode($storeId);
+            $encOrderId = $this->encode(($orderId % 100) + ($reg === $this->reg_delivery ? 0 : $reg * 100));
+            $encMinutes = $this->encode($this->getMinutesSinceEpoch($purchased));
 
-            $code = $encStoreId . $encVisitType . $encOrderId . $encMinutes;
+            $encStoreId = str_pad($encStoreId, 3, $zero, STR_PAD_LEFT);
+            $encOrderId = str_pad($encOrderId, 3, $zero, STR_PAD_LEFT);
+            $encMinutes = str_pad($encMinutes, 5, $zero, STR_PAD_LEFT);
+
+            $code = $encStoreId . $encOrderId . $encMinutes;
 
             $code .= $this->encode($this->getCheckDigit($code));
 
