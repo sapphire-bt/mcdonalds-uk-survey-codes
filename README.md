@@ -22,13 +22,12 @@ A non-exhaustive list of store IDs is included (stores.tsv). You can also find s
 
 The survey code above can be broken down as follows:
 
-| Code    | Decimal   | Meaning                                                                            |
-| -       | -         | -                                                                                  |
-| `7ZW`   | 1553      | Store ID.                                                                          |
-| `W`     | 3         | Not sure, but the vast majority of receipts always seem to have `W` here.          |
-| `NG`    | 168       | Order ID: last two digits + 125 (usually).                                         |
-| `H3ZFW` | 3,742,128 | Date/time of purchase (represented as number of minutes since `2016-02-01 00:00`). |
-| `J`     | 23        | Check digit (Luhn mod _N_ algorithm; uses 25 as a base).                           |
+| Code    | Decimal   | Meaning                                                                                                                                |
+| -       | -         | -                                                                                                                                      |
+| `7ZW`   | 1553      | Store ID.                                                                                                                              |
+| `WNG`   | 2043      | Usually seems to be a combination of the order ID's last two digits + the "reg" number multiplied by 100. In this case: 43 + 20 * 100. |
+| `H3ZFW` | 3,742,128 | Date/time of purchase (represented as number of minutes since `2016-02-01 00:00`).                                                     |
+| `J`     | 23        | Check digit (Luhn mod _N_ algorithm; uses 25 as a base).                                                                               |
 
 Values are encoded using the following base 25 system:
 
