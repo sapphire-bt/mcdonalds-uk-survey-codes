@@ -1,6 +1,7 @@
 const CHAR_MAP = "CM7WD6N4RHF9ZL3XKQGVPBTJY";
 const BASE = CHAR_MAP.length;
 const EPOCH = new Date("2016-02-01");
+const REG_DELIVERY = 61;
 
 function encode(num) {
 	let encoded = "";
@@ -58,12 +59,13 @@ function getCheckDigit(code) {
 	return checkDigit;
 }
 
-function generateCode(storeId, orderId, purchased) {
-	const encStoreId = encode(storeId).padStart(3, encode(0));
-	const encOrderId = encode((orderId % 100) + 125);
-	const encMinutes = encode(getMinutesSinceEpoch(purchased)).padStart(5, encode(0));
+function generateCode(storeId, orderId, purchased, reg=20) {
+    const zero = encode(0);
+	const encStoreId = encode(storeId).padStart(3, zero);
+	const encOrderId = encode((orderId % 100) + (reg === REG_DELIVERY ? 0 : reg * 100)).padStart(3, zero);
+	const encMinutes = encode(getMinutesSinceEpoch(purchased)).padStart(5, zero);
 
-	let code = encStoreId + encode(3) + encOrderId + encMinutes;
+	let code = encStoreId + encOrderId + encMinutes;
 
 	code += encode(getCheckDigit(code));
 
