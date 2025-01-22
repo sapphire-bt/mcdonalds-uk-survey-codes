@@ -16,6 +16,8 @@ The above will output `7ZWW-NGH3-ZFWJ` which matches the following receipt:
 
 ![Receipt showing code 7ZWW-NGH3-ZFWJ](./assets/7ZWW-NGH3-ZFWJ.jpg)
 
+Note the receipt contains `REG 20` - this is the default value used in the script. If you're trying to reconstruct a receipt's code and it doesn't look right, try including the `--reg` flag with the reg number when calling the script.
+
 A non-exhaustive list of store IDs is included (stores.tsv). You can also find store IDs by inspecting the return data from the [McDonald's store locator](https://www.mcdonalds.com/gb/en-gb/restaurant-locator.html) or by simply checking receipts from stores.
 
 ## About
