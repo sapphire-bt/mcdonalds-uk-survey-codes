@@ -24,8 +24,11 @@ def decode(encoded):
     return num
 
 
+def parse_datetime(val):
+    return datetime.strptime(val, "%Y-%m-%d %H:%M")
+
+
 def get_minutes_since_epoch(purchased):
-    purchased = datetime.strptime(purchased, "%Y-%m-%d %H:%M")
     minutes_since_epoch = purchased - EPOCH_BEGIN
     return int(minutes_since_epoch.total_seconds() / 60)
 
@@ -84,7 +87,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--store-id", type=int, required=True)
     parser.add_argument("-o", "--order-id", type=int, required=True)
-    parser.add_argument("-p", "--purchased", required=True)
+    parser.add_argument("-p", "--purchased", type=parse_datetime, required=True)
     parser.add_argument("-r", "--reg", type=int, default=20)
     args = parser.parse_args()
     main(args)
