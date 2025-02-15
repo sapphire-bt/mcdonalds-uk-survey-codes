@@ -1,8 +1,6 @@
 # McDonald's UK Survey Code Generator
 
-Given a store ID, order number, and date/time of purchase, this script will generate a code that can be entered in the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey that, upon completion, gives you another code that can be redeemed for discounted items.
-
-As of August 2023 you only need to enter the code to begin the survey; a price is not required.
+An attempt to reverse engineer the 12 digit codes found on McDonald's receipts used for the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey.
 
 ## Usage
 
@@ -97,6 +95,16 @@ Values are encoded using the following base 25 system:
 Further discussion on Reverse Engineering Stack Exchange where this was originally posted: https://reverseengineering.stackexchange.com/questions/32129/mcdonalds-receipt-codes
 
 Also included is a .csv file containing several survey codes gathered for research (discussed in issue #13).
+
+## "The survey isn't accepting generated codes"
+
+The scripts in this repository produce technically valid codes, but not every code is accepted by the survey. I don't know why this is as there's no visibility into the survey's backend validation.
+
+It's entirely possible that if you submit a code that looks like it was ordered via a drive-through from a store that doesn't actually have one, then they have some way of detecting that and rejecting the code.
+
+If this happens, consider experimenting with different values before opening an issue saying "it's not working".
+
+Although the survey asks for the amount spent, this does not form part of the 12 digit code and hasn't been required since at least August 2023.
 
 ## Confused?
 
