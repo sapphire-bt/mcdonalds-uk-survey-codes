@@ -1,12 +1,38 @@
 import argparse
 
+from dataclasses import dataclass
 from datetime import datetime
 from enum import IntEnum
-
 
 CHARS = "CM7WD6N4RHF9ZL3XKQGVPBTJY"
 BASE = len(CHARS)
 EPOCH_BEGIN = datetime(2016, 2, 1)
+
+
+@dataclass
+class McDonaldsOrder:
+    store_id: int
+    order_id: int
+    purchased: datetime
+    reg: int
+
+    def __post_init__(self):
+        if isinstance(self.purchased, str):
+            self.purchased = parse_datetime(self.purchased)
+
+    def get_code(self):
+        enc_store_id = encode(self.store_id)
+        enc_order_id = encode((self.order_id % 100) + (get_reg(self.reg) * 100))
+        enc_minutes = encode(get_minutes_since_epoch(self.purchased))
+
+        code = pad(enc_store_id, 3) + pad(enc_order_id, 3) + pad(enc_minutes, 5)
+        code += encode(get_check_digit(code))
+
+        return "{}-{}-{}".format(
+            code[0:4],
+            code[4:8],
+            code[8:12],
+        )
 
 
 class Reg(IntEnum):
@@ -30,6 +56,10 @@ def decode(encoded):
     return num
 
 
+def pad(val, amt, char=encode(0)):
+    return val.rjust(amt, char)
+
+
 def parse_datetime(val):
     return datetime.strptime(val, "%Y-%m-%d %H:%M")
 
@@ -37,6 +67,15 @@ def parse_datetime(val):
 def get_minutes_since_epoch(purchased):
     minutes_since_epoch = purchased - EPOCH_BEGIN
     return int(minutes_since_epoch.total_seconds() / 60)
+
+
+def get_reg(reg):
+    if reg == Reg.DELIVERY:
+        return 0
+    elif reg == Reg.APP:
+        return 1
+    else:
+        return reg
 
 
 def get_check_digit(code):
@@ -63,32 +102,9 @@ def get_check_digit(code):
     return check_digit
 
 
-def generate_code(store_id, order_id, purchased, reg):
-    zero = encode(0)  # Used for padding
-    if reg == Reg.DELIVERY:
-
-        reg = 0
-    elif reg == Reg.APP:
-        reg = 1
-
-    enc_store_id = encode(store_id).rjust(3, zero)
-    enc_order_id = encode((order_id % 100) + (reg * 100)).rjust(3, zero)
-    enc_minutes = encode(get_minutes_since_epoch(purchased)).rjust(5, zero)
-
-    code = enc_store_id + enc_order_id + enc_minutes
-
-    code += encode(get_check_digit(code))
-
-    return "{}-{}-{}".format(
-        code[0:4],
-        code[4:8],
-        code[8:12],
-    )
-
-
 def main(args):
-    code = generate_code(**vars(args))
-    print(code)
+    order = McDonaldsOrder(**vars(args))
+    print(order.get_code())
 
 
 if __name__ == "__main__":
