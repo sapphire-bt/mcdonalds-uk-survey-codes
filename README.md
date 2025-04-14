@@ -2,6 +2,8 @@
 
 An attempt to reverse engineer the 12 digit codes found on McDonald's receipts used for the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey.
 
+Demo: https://sapphire-bt.github.io/mcdonalds-uk-survey-codes/
+
 ## Usage
 
 Call the script with the following arguments:
@@ -105,7 +107,3 @@ It's entirely possible that if you submit a code that looks like it was ordered 
 If this happens, consider experimenting with different values before opening an issue saying "it's not working".
 
 Although the survey asks for the amount spent, this does not form part of the 12 digit code and hasn't been required since at least August 2023.
-
-## Confused?
-
-If the above made no sense to you and/or you just want to generate a code, download this repository using the green "<> Code" button at the top of the page, open demo/page.html in a web browser on your computer/laptop, then fill out the parameters as required.
