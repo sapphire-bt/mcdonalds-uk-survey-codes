@@ -1,4 +1,4 @@
-# McDonald's UK Survey Code Generator
+# McDonald's Receipt Validator (UK)
 
 An attempt to reverse engineer the 12 digit codes found on McDonald's receipts used for the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey.
 
