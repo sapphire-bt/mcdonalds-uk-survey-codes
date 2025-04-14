@@ -1,0 +1,110 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/pico.min.css" />
+        <link rel="stylesheet" href="css/choices.min.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+        <title>McDonald's UK Survey Code Generator</title>
+    </head>
+    <body>
+        <main class="container">
+            <h2>McDonald's Receipt Validator</h2>
+
+            <form>
+                <fieldset>
+                    <label>Store</label>
+                    <select name="store_id">
+                        <option value="">Select a store</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <label>
+                        Order ID
+                        <input type="number" pattern="[0-9]*" min="0" name="order_id" required />
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <label>
+                        Purchased
+                        <input type="datetime-local" min="2016-02-01T00:00" name="purchased" required />
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <label>
+                        Reg
+                        <input type="number" pattern="[0-9]*" min="0" name="reg" />
+                        <small>Leave blank to use the default value of 20.</small>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <input type="submit" value="Generate" />
+                </fieldset>
+            </form>
+
+            <hr />
+
+            <section class="code">
+                <h4>Entry code</h4>
+                <code id="code">&nbsp;</code>
+            </section>
+
+            <hr />
+
+            <a href="https://github.com/sapphire-bt/mcdonalds-uk-survey-codes"><small>Source</small></a>
+        </main>
+
+        <script src="../src/get_code.js"></script>
+        <script src="js/choices.min.js"></script>
+        <script>
+            (async () => {
+                new Choices("[name='store_id']", {
+                    choices: await getStores(),
+                    itemSelectText: "",
+                    maxItemCount: 1,
+                    searchResultLimit: 10,
+                });
+
+                document.querySelector("form").addEventListener("submit", (e) => {
+                    e.preventDefault();
+
+                    const codeContainer = document.querySelector("#code");
+                    const form = new FormData(e.target);
+                    const storeId = parseInt(form.get("store_id"), 10);
+                    const orderId = parseInt(form.get("order_id"), 10);
+                    const purchased = form.get("purchased");
+                    const reg = form.get("reg") ? parseInt(form.get("reg"), 10) : 20;
+                    const isValid = [storeId, orderId, reg].every(val => !isNaN(val));
+
+                    if (isValid && purchased) {
+                        const code = generateCode(storeId, orderId, purchased, reg);
+                        codeContainer.innerText = code;
+                    } else {
+                        alert("Invalid details");
+                    }
+                });
+            })();
+
+            function getStores() {
+                return new Promise(resolve => {
+                    fetch("https://raw.githubusercontent.com/sapphire-bt/mcdonalds-uk-survey-codes/main/assets/stores.tsv")
+                        .then(response => response.text())
+                        .then(data => {
+                            resolve(data.split("\n").map(row => {
+                                const [id, name] = row.split("\t");
+                                return {
+                                    value: id,
+                                    label: `${name} (${id})`,
+                                };
+                            }));
+                        })
+                        .catch(() => alert("Error loading stores"));
+                });
+            }
+        </script>
+    </body>
+</html>
