@@ -96,8 +96,6 @@ Values are encoded using the following base 25 system:
 
 Further discussion on Reverse Engineering Stack Exchange where this was originally posted: https://reverseengineering.stackexchange.com/questions/32129/mcdonalds-receipt-codes
 
-Also included is a .csv file containing several survey codes gathered for research (discussed in issue #13).
-
 ## "The survey isn't accepting generated codes"
 
 The scripts in this repository produce technically valid codes, but not every code is accepted by the survey. I don't know why this is as there's no visibility into the survey's backend validation.
