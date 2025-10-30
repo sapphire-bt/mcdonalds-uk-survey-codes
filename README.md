@@ -1,35 +1,44 @@
-# McDonald's Receipt Validator (UK)
+# McDonald's receipt code analysis (unofficial)
 
 An attempt to reverse engineer the 12 digit codes found on McDonald's receipts used for the [Food for Thoughts](https://www.mcdfoodforthoughts.com/) survey.
 
-Demo: https://sapphire-bt.github.io/mcdonalds-uk-survey-codes/
+> [!IMPORTANT]
+> **Disclaimer**
 
-## Usage
+This project is an independent, educational analysis of McDonald's UK receipts.
+
+It is **not affiliated with, endorsed by, or connected to McDonald's International Property Company, Ltd.** or any of its subsidiaries.
+
+The contents of this repository represent speculative research based on publicly available information, and are provided here for research and educational purposes only.
+
+No part of this project is intended to enable or encourage misuse, fraud, or unauthorised access to McDonald's systems.
+
+_Polite notice to lawyers:_ the french fries emoji, 🍟, is not McDonald's intellectual property; it's a Unicode character.
+
+## How to use
 
 Call the script with the following arguments:
 
-```
-get_code.py --store-id 1553 --order-id 1743 --purchased "2023-03-14 16:48"
+```shell
+python get_code.py --store-id 1553 --order-id 1743 --purchased "2023-03-14 16:48"
 ```
 
-The above will output `7ZWW-NGH3-ZFWJ` which matches the following receipt:
+The above will reproduce a known historical code, `7ZWW-NGH3-ZFWJ`, as shown in the following receipt:
 
 ![Receipt showing code 7ZWW-NGH3-ZFWJ](./assets/7ZWW-NGH3-ZFWJ.jpg)
 
-Note the receipt contains `REG 20` - this is the default value used in the script. If you're trying to reconstruct a receipt's code and it doesn't look right, try including the `--reg` flag with the reg number when calling the script.
+Note the receipt contains `REG 20` - this is the default value used in the script, but not all receipts have the same value.
 
-A non-exhaustive list of store IDs is included (stores.tsv). You can also find store IDs by inspecting the return data from the [McDonald's store locator](https://www.mcdonalds.com/gb/en-gb/restaurant-locator.html) or by simply checking receipts from stores.
+## Algorithm speculation
 
-## About
+The survey code above appears to be broken down as follows:
 
-The survey code above can be broken down as follows:
-
-| Code    | Decimal   | Meaning                                                                                                                                |
-| -       | -         | -                                                                                                                                      |
-| `7ZW`   | 1553      | Store ID.                                                                                                                              |
-| `WNG`   | 2043      | Usually seems to be a combination of the order ID's last two digits + the "reg" number multiplied by 100. In this case: 43 + 20 * 100. |
-| `H3ZFW` | 3,742,128 | Date/time of purchase (represented as number of minutes since `2016-02-01 00:00`).                                                     |
-| `J`     | 23        | Check digit (Luhn mod _N_ algorithm; uses 25 as a base).                                                                               |
+| Code    | Decimal   | Meaning                                                                                                                                  |
+| -       | -         | -                                                                                                                                        |
+| `7ZW`   | 1553      | Store ID.                                                                                                                                |
+| `WNG`   | 2043      | Usually seems to be a combination of the "reg" number multiplied by 100 + the order ID's last two digits. In this case: (20 * 100) + 43. |
+| `H3ZFW` | 3,742,128 | Date/time of purchase (represented as number of minutes since `2016-02-01 00:00`).                                                       |
+| `J`     | 23        | Check digit (Luhn mod _N_ algorithm; uses 25 as a base).                                                                                 |
 
 Values are encoded using the following base 25 system:
 
@@ -94,14 +103,7 @@ Values are encoded using the following base 25 system:
     </tbody>
 </table>
 
-Further discussion on Reverse Engineering Stack Exchange where this was originally posted: https://reverseengineering.stackexchange.com/questions/32129/mcdonalds-receipt-codes
+## References
 
-## "The survey isn't accepting generated codes"
-
-The scripts in this repository produce technically valid codes, but not every code is accepted by the survey. I don't know why this is as there's no visibility into the survey's backend validation.
-
-It's entirely possible that if you submit a code that looks like it was ordered via a drive-through from a store that doesn't actually have one, then they have some way of detecting that and rejecting the code.
-
-If this happens, consider experimenting with different values before opening an issue saying "it's not working".
-
-Although the survey asks for the amount spent, this does not form part of the 12 digit code and hasn't been required since at least August 2023.
+* A non-exhaustive list of store IDs is included (stores.tsv). You can also find store IDs by inspecting the return data from the [McDonald's restaurant locator](https://www.mcdonalds.com/gb/en-gb/restaurant-locator.html) or by simply checking receipts.
+* Discussion on Reverse Engineering Stack Exchange where this was originally posted: https://reverseengineering.stackexchange.com/questions/32129/mcdonalds-receipt-codes
