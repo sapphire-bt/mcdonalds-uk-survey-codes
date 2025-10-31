@@ -7,13 +7,13 @@ An attempt to reverse engineer the 12 digit codes found on McDonald's receipts u
 
 This project is an independent, educational analysis of McDonald's UK receipts.
 
-It is **not affiliated with, endorsed by, or connected to McDonald's International Property Company, Ltd.** or any of its subsidiaries.
+It is **not** affiliated with, endorsed by, or connected to McDonald's International Property Company, Ltd.
 
 The contents of this repository represent speculative research based on publicly available information, and are provided here for research and educational purposes only.
 
 No part of this project is intended to enable or encourage misuse, fraud, or unauthorised access to McDonald's systems.
 
-_Polite notice to lawyers:_ the french fries emoji, 🍟, is not McDonald's intellectual property; it's a Unicode character.
+_Polite notice to McLawyers:_ the french fries emoji, 🍟, is not McDonald's intellectual property; it's a Unicode character.
 
 ## How to use
 
