@@ -103,6 +103,97 @@ Values are encoded using the following base 25 system:
     </tbody>
 </table>
 
+## Other algorithms
+
+Speculation for other countries is presented below. Not all values are currently understood.
+
+### 🇩🇰 Denmark / 🇫🇮 Finland / 🇳🇴 Norway / 🇸🇪 Sweden
+
+| Code length | Encoding scheme |
+| -           | -               |
+| 15          | Base 25         |
+
+#### Example
+
+`CZ9F4-N9M3Q-CJ779`
+
+| Code      | Decimal    | Meaning                |
+| -         | -          | -                      |
+| `CZ9`     | 311        | Store ID               |
+| `F4N9M3Q` | 2512282242 | Date/time (YYMMDDHHmm) |
+| `CJ`      | 23         | Reg                    |
+| `77`      | 52         | Unknown*               |
+| `9`       | 11         | Check digit            |
+
+\*Does not directly decode to the order number (67 for this example specifically).
+
+---
+
+### 🇪🇪 Estonia
+
+| Code length | Encoding scheme |
+| -           | -               |
+| 20          | Base 25         |
+
+#### Example
+
+`CCMKK-RYW6M-MJC77-XC7JR`
+
+| Code   | Decimal | Meaning       |
+| -      | -       | -             |
+| `CCM`  | 1       | Store ID      |
+| `KKRY` | 260224  | Date (YYMMDD) |
+| `W6M`  | 2001    | Time (HHmm)   |
+| `MJ`   | 48      | Reg           |
+| `C77X` | 1315    | Price         |
+| `C7J`  | 73      | Order number  |
+| `R`    | 8       | Check digit   |
+
+---
+
+### 🇪🇸 Spain
+
+| Code length | Encoding scheme |
+| -           | -               |
+| 18          | Base 25         |
+
+#### Example
+
+`MQDHBD-FXFBCB-MRWZRM`
+
+| Code      | Decimal    | Meaning                |
+| -         | -          | -                      |
+| `MQD`     | 1054       | Store ID               |
+| `HBDFXFB` | 2404072146 | Date/time (YYMMDDHHmm) |
+| `CB`      | 21         | Reg                    |
+| `MR`      | 33         | Unknown*               |
+| `WZR`     | 2183       | Price                  |
+| `M`       | 1          | Check digit            |
+
+\*Does not directly decode to the order number (90 for this example specifically).
+
+---
+
+### 🇺🇸 USA
+
+| Code length | Encoding scheme |
+| -           | -               |
+| 26          | None (decimal)  |
+
+#### Example
+
+`10862-02990-31319-16077-00072-9`
+
+| Value  | Meaning                                             |
+| -      | -                                                   |
+| 10862  | Store ID                                            |
+| 02     | Order number                                        |
+| 99     | Reg                                                 |
+| 031319 | Date (MMDDYY)                                       |
+| 1607   | Time (HHmm)                                         |
+| 7      | Check digit (Luhn algorithm)                        |
+| 000729 | Price (**not** included in check digit calculation) |
+
 ## References
 
 * A non-exhaustive list of store IDs is included (stores.tsv). You can also find store IDs by inspecting the return data from the [McDonald's restaurant locator](https://www.mcdonalds.com/gb/en-gb/restaurant-locator.html) or by simply checking receipts.
