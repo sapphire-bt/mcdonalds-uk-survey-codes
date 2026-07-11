@@ -129,7 +129,7 @@ Speculation for other countries is presented below. Not all values are currently
 
 ---
 
-### 🇪🇪 Estonia
+### 🇪🇪 Estonia / 🇭🇺 Hungary
 
 | Code length | Encoding scheme |
 | -           | -               |
