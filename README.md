@@ -107,6 +107,70 @@ Values are encoded using the following base 25 system:
 
 Speculation for other countries is presented below. Not all values are currently understood.
 
+### 🇩🇪 Germany
+
+| Code length | Encoding scheme |
+| -           | -               |
+| 12          | Base 36 followed by a keyed cyclic shift |
+
+This structure was reproduced across eight clearly legible receipts from three
+store IDs. Faded or OCR-ambiguous codes were excluded from the analysis.
+
+#### Example
+
+`btyd-wjw4-vigi`
+
+The code is derived from an 18-digit decimal value with the following layout:
+
+```text
+SSSS MM DD hh mm PP OO CC
+```
+
+| Value  | Meaning |
+| -      | -       |
+| `0554` | Store ID |
+| `08`   | Month |
+| `07`   | Day |
+| `14`   | Hour |
+| `38`   | Minute |
+| `25`   | POS/register ID |
+| `31`   | Last two digits of the order number |
+| `20`   | Check value |
+
+The year is not included. The encoded time appears to be the order, payment, or
+fiscal-record time, which can be one or two minutes earlier than the time printed
+in the receipt header.
+
+To produce a code:
+
+1. Concatenate the first seven fields as 16 decimal digits. For the example,
+   this produces `0554080714382531`.
+2. Sum those 16 individual digits modulo 36 and append the result as two decimal
+   digits. The digit sum in the example is 56, so `CC` is `20` and the complete
+   decimal value is `055408071438253120`.
+3. Treat the complete value as one decimal integer, convert it to lowercase Base
+   36 using `0123456789abcdefghijklmnopqrstuvwxyz`, and left-pad it to 12 characters.
+   The example becomes `0f5kismcbpz4`.
+4. Apply a cyclic Caesar-style shift to each character using the repeating key
+   `betteraskthe` over the same Base 36 alphabet. For position `i`:
+
+   ```text
+   encoded[i] = alphabet[(index(plain[i]) + index(key[i])) mod 36]
+   ```
+
+5. Insert hyphens after the fourth and eighth characters. The hyphens do not
+   delimit fields.
+
+A Python reference implementation supporting both encoding and decoding is
+included in [`src/get_code_de.py`](./src/get_code_de.py):
+
+```shell
+python src/get_code_de.py encode 0554 08 07 14 38 25 31
+python src/get_code_de.py decode btyd-wjw4-vigi
+```
+
+---
+
 ### 🇩🇰 Denmark / 🇫🇮 Finland / 🇳🇴 Norway / 🇸🇪 Sweden
 
 | Code length | Encoding scheme |
