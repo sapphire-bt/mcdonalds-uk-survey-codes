@@ -103,6 +103,34 @@ Values are encoded using the following base 25 system:
     </tbody>
 </table>
 
+## New 25 character format (November 2026)
+
+> [!NOTE]
+> Preliminary: based on a single receipt. Two fields are not yet understood, and `get_code.py` does not generate this format. See [issue #24](https://github.com/sapphire-bt/mcdonalds-uk-survey-codes/issues/24).
+
+From November 2026, UK receipts print a 25 character code in five groups of five, for use at tellthearches.co.uk. It uses the same base 25 alphabet and the same check digit algorithm as the 12 character code, with a layout close to the Estonia / Hungary variant below.
+
+The example below is not from a real receipt, but is laid out the same way as the one observed:
+
+`CC7ZW-FQHKB-YHMCB-RCCCJ-YCMQP`
+
+| Code      | Decimal    | Meaning                |
+| -         | -          | -                      |
+| `CC7ZW`   | 1553       | Store ID               |
+| `FQHKBYH` | 2611201234 | Date/time (YYMMDDHHmm) |
+| `M`       | 1          | Unknown                |
+| `CB`      | 21         | Reg                    |
+| `R`       | 8          | Unknown                |
+| `CCCJY`   | 599        | Total in pence         |
+| `CMQ`     | 42         | Order number           |
+| `P`       | 20         | Check digit            |
+
+Notes:
+
+* The encoded time was one minute earlier than the time printed in the receipt header, as with Germany.
+* The two unknown fields were 1 and 8 on the observed receipt (an in-restaurant order at reg 21). The survey accepts other values for both without any visible change.
+* The survey uses the reg number to decide which questions to ask: reg 21 was asked whether the order was received by table service or at the front counter, while reg 20 (seen on drive-thru receipts) was not.
+
 ## Other algorithms
 
 Speculation for other countries is presented below. Not all values are currently understood.
